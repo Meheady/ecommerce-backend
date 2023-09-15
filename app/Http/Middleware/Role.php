@@ -14,9 +14,9 @@ class Role
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $userType): Response
+    public function handle(Request $request, Closure $next, $role): Response
     {
-        if (Auth::user()->user_type !== $userType){
+        if (Auth::user()->user_type !== $role){
             return apiError('Your are not authorize',401);
         }
         return $next($request);

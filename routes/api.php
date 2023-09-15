@@ -24,19 +24,16 @@ Route::post('/token-refresh',[UserAuthenticationController::class,'refreshToken'
 
 Route::post('/logout',[UserAuthenticationController::class,'logout'])->middleware('api.auth:api');
 
-Route::middleware(['api.auth:api','role:admin'])->group(function (){
+
+
+Route::middleware(['api.auth:api','role:admin'])->prefix('admin')->group(function (){
     Route::prefix('product')->controller(ProductController::class)->group(function (){
-
+        Route::get('/index','index');
+        Route::get('/index/{id}','show');
+        Route::post('/store','store');
+        Route::post('/update','update');
+        Route::get('/delete/{id}','destroy');
     });
-});
-
-
-Route::middleware(['api.auth:api','role:customer'])->group(function (){
-    Route::prefix('product')->controller(ProductController::class)->group(function (){
-
-    });
-});
-
-Route::prefix('product')->controller(ProductController::class)->group(function (){
 
 });
+

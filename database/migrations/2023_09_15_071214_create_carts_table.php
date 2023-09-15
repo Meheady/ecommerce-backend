@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
+            $table->string('product_name');
+            $table->integer('customer_id');
+            $table->string('product_code');
+            $table->string('size')->nullable();
+            $table->string('color')->nullable();
+            $table->integer('quantity');
+            $table->double('unit_price');
+            $table->double('total_price');
             $table->timestamps();
         });
     }
