@@ -7,10 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected static $user;
+
+    public static function selectUser($userId)
+    {
+        self::$user = User::findOrFail($userId);
+        return self::$user;
+    }
+
+
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +45,33 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Rest omitted for brevity
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+
+
+
+
 
     /**
      * The attributes that should be cast.

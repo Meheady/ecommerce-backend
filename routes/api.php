@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\order\OrderController;
+use App\Http\Controllers\product\ProductController;
+use App\Http\Controllers\cart\CartController;
+use App\Http\Controllers\auth\UserAuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +18,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login',[UserAuthenticationController::class,'login']);
+
+Route::post('/token-refresh',[UserAuthenticationController::class,'refreshToken'])->middleware('token.refresh:api');
+
+Route::post('/logout',[UserAuthenticationController::class,'logout'])->middleware('api.auth:api');
+
+Route::middleware(['api.auth:api','role:admin'])->group(function (){
+    Route::prefix('product')->controller(ProductController::class)->group(function (){
+
+    });
+});
+
+
+Route::middleware(['api.auth:api','role:customer'])->group(function (){
+    Route::prefix('product')->controller(ProductController::class)->group(function (){
+
+    });
+});
+
+Route::prefix('product')->controller(ProductController::class)->group(function (){
+
 });
