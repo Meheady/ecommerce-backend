@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
 
-    protected $imagePath;
 
+//    image upload method, get uploaded path
     public function getImagePath($image)
     {
         $imageExt = $image->getClientOriginalExtension();
@@ -41,11 +41,10 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
+            $product = Product::findOrFail($id);
 
-            $allProduct = Product::findOrFail($id);
-
-            if (count($allProduct) > 0){
-                return apiResponse($allProduct);
+            if ($product != null){
+                return apiResponse($product);
             }
             return apiResponse(null,'Data not found',404);
 
@@ -93,11 +92,13 @@ class ProductController extends Controller
             $requestId = $request->id;
             $product = Product::findOrFail($requestId);
 
+
             if ($request->hasFile('productImage')){
+
                 if (file_exists($product->product_image)){
                     unlink($product->product_image);
-                    $imagePath = $this->getImagePath($request->file('productImage'));
                 }
+                $imagePath = $this->getImagePath($request->file('productImage'));
             }
             else{
                 $imagePath  = $product->product_image;

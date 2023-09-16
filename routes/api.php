@@ -6,6 +6,8 @@ use App\Http\Controllers\order\OrderController;
 use App\Http\Controllers\product\ProductController;
 use App\Http\Controllers\cart\CartController;
 use App\Http\Controllers\auth\UserAuthenticationController;
+use App\Http\Controllers\frontend\FrontendController;
+use App\Http\Controllers\customer\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +38,10 @@ Route::middleware(['api.auth:api','role:admin'])->prefix('admin')->group(functio
     });
 
 });
+
+Route::controller(FrontendController::class)->group(function (){
+    Route::get('/get-all-product','getAllProduct');
+    Route::get('/single-product/{id}','singleProduct');
+});
+
 
