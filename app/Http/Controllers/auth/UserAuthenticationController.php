@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Mockery\Exception;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
@@ -33,6 +34,28 @@ class UserAuthenticationController extends Controller
         }
         catch (Exception $e){
             return apiError($e->getMessage(), $e->getCode());
+        }
+
+    }
+
+    public function registration(Request $request)
+    {
+        $validatedData = Validator::make($request->all(),[
+            'email' => 'required',
+            'phone' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validatedData->fails()){
+            return apiError($validatedData->errors());
+        }
+        try {
+
+            User::registerCustomer($request);
+            return apiResponse('Successfully registered');
+
+        }catch (Exception $e){
+            return apiError($e->getMessage(),$e->getCode());
         }
 
     }

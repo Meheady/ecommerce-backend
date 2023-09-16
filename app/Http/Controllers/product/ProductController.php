@@ -31,7 +31,7 @@ class ProductController extends Controller
             if (count($allProduct) > 0){
                 return apiResponse($allProduct);
             }
-            return apiResponse(null,'Data not found',404);
+            return apiResponse(null,'Data not found');
 
         }
         catch (\Exception $e){
@@ -123,6 +123,7 @@ class ProductController extends Controller
                 if ($productDelete != 1){
                     return apiError('Product not deleted');
                 }
+                return apiResponse(null,'Product delete successfully');
             }
 
         }

@@ -12,7 +12,7 @@ class Cart extends Model
     protected $guarded = [];
 
 
-    public static function saveProductToCart($request)
+    public static function saveProductToCart($payload)
     {
 
     }

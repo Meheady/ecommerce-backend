@@ -21,6 +21,7 @@ use App\Http\Controllers\customer\ProductCartController;
 */
 
 Route::post('/login',[UserAuthenticationController::class,'login']);
+Route::post('/registration',[UserAuthenticationController::class,'registration']);
 
 Route::post('/token-refresh',[UserAuthenticationController::class,'refreshToken'])->middleware('token.refresh:api');
 
@@ -39,20 +40,25 @@ Route::middleware(['api.auth:api','role:admin'])->prefix('admin')->group(functio
 
 });
 
-
 Route::middleware(['api.auth:api','role:customer'])->prefix('customer')->group(function (){
-    Route::prefix('cart')->controller(ProductController::class)->group(function (){
+    Route::prefix('cart')->controller(ProductCartController::class)->group(function (){
         Route::get('/index','customerCartList');
         Route::post('/store','storeCart');
         Route::post('/update','updateCart');
-        Route::get('/delete/{id}','destroy');
+        Route::get('/delete/{product_code}','removeCartList');
+        Route::get('/item-plus/{product_code}','cartItemPlus');
+        Route::get('/item-minus/{product_code}','cartItemMinus');
+    });
+    Route::prefix('order')->controller(OrderController::class)->group(function (){
+        Route::get('/index','customerOrderList');
+        Route::post('/store','storeOrder');
     });
 
 });
 
 Route::controller(FrontendController::class)->group(function (){
     Route::get('/get-all-product','getAllProduct');
-    Route::get('/single-product/{id}','singleProduct');
+    Route::get('/single-product/{id}/{slug}','singleProduct');
 });
 
 

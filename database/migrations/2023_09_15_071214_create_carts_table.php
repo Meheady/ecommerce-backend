@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->integer('customer_id');
             $table->string('product_code');
+            $table->string('product_image');
             $table->string('size')->nullable();
             $table->string('color')->nullable();
             $table->integer('quantity');

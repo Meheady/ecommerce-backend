@@ -48,10 +48,10 @@ class FrontendController extends Controller
         }
     }
 
-    public function singleProduct($id)
+    public function singleProduct($id,$slug)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = Product::where('id',$id)->where('product_slug', $slug)->first();
 
             // Calculate the discount amount
             $discountAmount = ($product->discount / 100) * $product->price;

@@ -20,9 +20,15 @@ class ApiAuthentication
     public function handle(Request $request, Closure $next): Response
     {
         try {
+            $token = JWTAuth::getToken();
+
+            if (!$token) {
+                return apiError('Unauthenticated, Login First');
+            }
             $user = JWTAuth::parseToken()->authenticate();
+
             if (!$user) {
-                return response()->json(['message' => 'user not found'], 404);
+                return response()->json(['message' => 'User not found'], 404);
             }
         }
         catch (TokenExpiredException $e){
