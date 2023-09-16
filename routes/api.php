@@ -4,10 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\order\OrderController;
 use App\Http\Controllers\product\ProductController;
-use App\Http\Controllers\cart\CartController;
 use App\Http\Controllers\auth\UserAuthenticationController;
 use App\Http\Controllers\frontend\FrontendController;
 use App\Http\Controllers\customer\CustomerController;
+use App\Http\Controllers\customer\ProductCartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +34,17 @@ Route::middleware(['api.auth:api','role:admin'])->prefix('admin')->group(functio
         Route::get('/index/{id}','show');
         Route::post('/store','store');
         Route::post('/update','update');
+        Route::get('/delete/{id}','destroy');
+    });
+
+});
+
+
+Route::middleware(['api.auth:api','role:customer'])->prefix('customer')->group(function (){
+    Route::prefix('cart')->controller(ProductController::class)->group(function (){
+        Route::get('/index','customerCartList');
+        Route::post('/store','storeCart');
+        Route::post('/update','updateCart');
         Route::get('/delete/{id}','destroy');
     });
 
